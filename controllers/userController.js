@@ -19,6 +19,14 @@ exports.processPayment = (req, res) => {
     });
 };
 
+exports.buyPremium = (req, res) => {
+    // Logic lama yang hilang: Update status user jadi 'paid'
+    User.updatePaymentStatus(req.session.userId, 'paid', (err) => {
+        if (err) throw err;
+        res.redirect('/user/dashboard');
+    });
+};
+
 exports.generateKey = (req, res) => {
     // Cek status bayar dulu via DB
     User.findById(req.session.userId, (err, results) => {

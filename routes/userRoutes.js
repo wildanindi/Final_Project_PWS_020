@@ -7,7 +7,6 @@ const { requireLogin } = require('../middlewares/authMiddleware');
 router.use(requireLogin);
 
 router.get('/dashboard', userController.dashboard);
-router.post('/pay', userController.processPayment);
 router.post('/generate-key', userController.generateKey);
 router.post('/validate-key', userController.validateKey);
 router.get('/menu-list', userController.listMenu);
@@ -20,5 +19,6 @@ router.post('/checkout', userController.checkout);
 router.get('/payment/:id', userController.paymentPage);
 router.post('/process-payment', userController.processPayment);
 // ...
+router.post('/pay', userController.buyPremium); 
 
 module.exports = router;
