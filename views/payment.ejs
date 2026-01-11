@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+            <h3 class="fw-bold text-center mb-4">💳 Pembayaran Pesanan</h3>
+            
+            <div class="alert alert-info text-center">
+                Total yang harus dibayar:<br>
+                <strong class="fs-3">Rp <%= order.total_harga.toLocaleString('id-ID') %></strong>
+            </div>
+
+            <form action="/user/process-payment" method="POST">
+                <input type="hidden" name="order_id" value="<%= order.id %>">
+                <input type="hidden" name="amount" value="<%= order.total_harga %>">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Pilih Metode Pembayaran</label>
+                    <select name="payment_method" class="form-select" required>
+                        <option value="">-- Pilih Metode --</option>
+                        <option value="cash">💵 Tunai (Cash)</option>
+                        <option value="qris">📱 QRIS</option>
+                        <option value="ewallet">💳 E-Wallet (OVO/Gopay)</option>
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg fw-bold">Bayar Sekarang</button>
+                    <a href="/user/menu-list" class="btn btn-outline-secondary">Bayar Nanti</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">🍽️ Daftar Menu</h2>
+        <p class="text-muted">Pilih kategori menu kesukaanmu.</p>
+    </div>
+    <div>
+        <a href="/user/cart" class="btn btn-warning me-2 fw-bold shadow-sm">
+            🛒 Keranjang
+        </a>
+        <a href="/user/dashboard" class="btn btn-outline-secondary">Dashboard</a>
+        <a href="/auth/logout" class="btn btn-danger ms-2">Logout</a>
+    </div>
+</div>
+
+<ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active fw-bold rounded-pill px-4" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab">
+            Semua
+        </button>
+    </li>
+    
+    <% categories.forEach((cat, index) => { %>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold rounded-pill px-4 ms-2" id="pills-<%= cat.id %>-tab" data-bs-toggle="pill" data-bs-target="#pills-<%= cat.id %>" type="button" role="tab">
+            <%= cat.nama_kategori %>
+        </button>
+    </li>
+    <% }) %>
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+    
+    <div class="tab-pane fade show active" id="pills-all" role="tabpanel">
+        <div class="row">
+            <% menus.forEach(m => { %>
+                <%- include('partials/menu_card', { m: m }) %>
+            <% }) %>
+        </div>
+    </div>
+
+    <% categories.forEach((cat) => { %>
+    <div class="tab-pane fade" id="pills-<%= cat.id %>" role="tabpanel">
+        <div class="row">
+            <% const filteredMenus = menus.filter(m => m.category_id === cat.id); %>
+            
+            <% if (filteredMenus.length > 0) { %>
+                <% filteredMenus.forEach(m => { %>
+                    <%- include('partials/menu_card', { m: m }) %>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12 text-center py-5 text-muted">
+                    <h5>Belum ada menu di kategori ini 😔</h5>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <% }) %>
+
+</div>
+
+<%- include('partials/footer') %>

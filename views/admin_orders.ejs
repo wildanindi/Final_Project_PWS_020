@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+<h2>👨‍🍳 Daftar Pesanan Masuk (Kitchen Display)</h2>
+<div class="row">
+    <% orders.forEach(o => { %>
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <strong>Order #<%= o.id %> - <%= o.username %></strong>
+                <span class="badge bg-<%= o.status === 'pending' ? 'warning' : (o.status === 'served' ? 'success' : 'primary') %>">
+                    <%= o.status.toUpperCase() %>
+                </span>
+            </div>
+            <div class="card-body">
+                <p>Total: Rp <%= o.total_harga %></p>
+                <p class="text-muted"><small>Waktu: <%= o.created_at %></small></p>
+                
+                <form action="/admin/order-status" method="POST" class="d-flex gap-2">
+                    <input type="hidden" name="id" value="<%= o.id %>">
+                    <button name="status" value="cooking" class="btn btn-sm btn-info">🍳 Masak</button>
+                    <button name="status" value="served" class="btn btn-sm btn-success">✅ Saji</button>
+                    <button name="status" value="cancelled" class="btn btn-sm btn-danger">❌ Batal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>
+<%- include('partials/footer') %>

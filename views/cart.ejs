@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+<h2>🛒 Keranjang Pesanan</h2>
+<table class="table">
+    <tr>
+        <th>Menu</th>
+        <th>Jumlah</th>
+        <th>Subtotal</th>
+    </tr>
+    <% cart.forEach(item => { %>
+    <tr>
+        <td><%= item.nama_menu %></td>
+        <td><%= item.quantity %></td>
+        <td>Rp <%= item.harga * item.quantity %></td>
+    </tr>
+    <% }) %>
+</table>
+<h3>Total: Rp <%= total %></h3>
+
+<form action="/user/checkout" method="POST">
+    <button type="submit" class="btn btn-success btn-lg">Checkout Sekarang</button>
+</form>
+<%- include('partials/footer') %>

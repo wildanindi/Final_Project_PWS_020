@@ -1,0 +1,41 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📈 Laporan Penjualan Harian</h2>
+    <a href="/admin/dashboard" class="btn btn-outline-secondary">Kembali ke Dashboard</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Jumlah Transaksi</th>
+                    <th>Total Pendapatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reports.forEach(r => { %>
+                <tr>
+                    <td><%= new Date(r.tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                    <td class="text-center"><%= r.total_transaksi %> Order</td>
+                    <td class="fw-bold text-success">Rp <%= r.pendapatan.toLocaleString('id-ID') %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <% if(reports.length === 0) { %>
+            <div class="text-center py-4 text-muted">
+                Belum ada data penjualan yang valid.
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div class="mt-4">
+    <button onclick="window.print()" class="btn btn-secondary">🖨️ Cetak PDF</button>
+</div>
+
+<%- include('partials/footer') %>

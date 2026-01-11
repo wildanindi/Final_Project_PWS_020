@@ -1,0 +1,76 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👋 Halo, Admin!</h2>
+    <a href="/auth/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100">
+            <h5 class="mb-3 fw-bold">➕ Tambah Menu</h5>
+            <form action="/admin/add-menu" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Nama Menu</label>
+                    <input type="text" name="nama_menu" class="form-control" placeholder="Cth: Kopi Susu" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Kategori</label>
+                    <select name="category_id" class="form-select" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat.id %>"><%= cat.nama_kategori %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Harga (Rp)</label>
+                    <input type="number" name="harga" class="form-control" placeholder="15000" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea name="deskripsi" class="form-control" rows="3" placeholder="Deskripsi singkat..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Simpan Menu</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h5 class="mb-3 fw-bold">📋 Daftar Menu Cafe</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Menu</th>
+                            <th>Harga</th>
+                            <th>Deskripsi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% menus.forEach(m => { %>
+                        <tr>
+                            <td class="fw-bold"><%= m.nama_menu %></td>
+                            <td class="text-success">Rp <%= m.harga.toLocaleString('id-ID') %></td>
+                            <td class="text-muted small"><%= m.deskripsi %></td>
+                            <td>
+                                <a href="/admin/edit/<%= m.id %>" class="btn btn-sm btn-warning me-1">Edit</a>
+
+                                <a href="/admin/delete/<%= m.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <% if(menus.length === 0) { %>
+                <p class="text-center text-muted mt-3">Belum ada menu yang ditambahkan.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

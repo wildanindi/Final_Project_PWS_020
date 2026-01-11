@@ -1,0 +1,27 @@
+<div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm hover-effect border-0">
+        <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="card-title fw-bold mb-0 text-dark"><%= m.nama_menu %></h5>
+                    <small class="text-primary" style="font-size: 0.8rem;">
+                        <%= m.nama_kategori || 'Umum' %>
+                    </small>
+                </div>
+                <span class="badge bg-success rounded-pill">Rp <%= m.harga.toLocaleString('id-ID') %></span>
+            </div>
+            
+            <p class="card-text text-muted flex-grow-1 mt-2"><%= m.deskripsi %></p>
+            
+            <form action="/user/add-to-cart" method="POST" class="mt-3">
+                <input type="hidden" name="menu_id" value="<%= m.id %>">
+                <input type="hidden" name="nama_menu" value="<%= m.nama_menu %>">
+                <input type="hidden" name="harga" value="<%= m.harga %>">
+                
+                <button type="submit" class="btn btn-outline-primary w-100 fw-bold rounded-pill">
+                    ➕ Tambah
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
