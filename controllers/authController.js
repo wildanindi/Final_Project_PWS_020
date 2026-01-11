@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto'); 
 const User = require('../models/User');
 
 exports.formLogin = (req, res) => {
@@ -7,26 +8,43 @@ exports.formLogin = (req, res) => {
 
 exports.processLogin = (req, res) => {
     const { username, password } = req.body;
+    
     User.findByUsername(username, async (err, results) => {
         if (err) throw err;
+        
         if (results.length > 0) {
             const user = results[0];
             const isMatch = await bcrypt.compare(password, user.password);
+            
             if (isMatch) {
+                // Login Berhasil! Set Session dasar dulu
                 req.session.userId = user.id;
                 req.session.role = user.role;
                 req.session.username = user.username;
-                
-                // Reset status akses menu saat login baru
-                req.session.menuUnlocked = false; 
+                req.session.menuUnlocked = false; // Reset akses menu
 
-                if (user.role === 'admin') {
-                    return res.redirect('/admin/dashboard');
-                }
-                return res.redirect('/user/dashboard');
+                // [LOGIC BARU] Generate API Key Baru setiap Login
+                const newApiKey = crypto.randomBytes(16).toString('hex');
+
+                // Update Key ke Database
+                User.updateApiKey(user.id, newApiKey, (err) => {
+                    if (err) throw err;
+
+                    // Setelah update key sukses, baru redirect sesuai role
+                    if (user.role === 'admin') {
+                        return res.redirect('/admin/dashboard');
+                    }
+                    
+                    // User diarahkan ke dashboard (dimana API Key baru akan tampil)
+                    return res.redirect('/user/dashboard');
+                });
+
+            } else {
+                res.send('Password salah bro');
             }
+        } else {
+            res.send('User gak ketemu');
         }
-        res.send('Username atau Password salah bro');
     });
 };
 
